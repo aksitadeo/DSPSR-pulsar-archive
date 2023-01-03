@@ -65,18 +65,11 @@ for filename in os.listdir():
 
 os.system('pav -d -GTp AATEST7ARCH.ar')
 
-# =============================================================================
-# f = open("TEST2.cands","r")
-# 
-# for x in f:
-#     print('{}'.format(x))
-# =============================================================================
-
 #%% Loop over all files
 
 for filename in os.listdir():
     if filename.endswith(".sf"):
         print(" ")
         print('Now working on: {}'.format(filename))
-        #os.system('grep 700.00 {}.candidates > {}_cuts.candidates'.format(filename,filename))
+        os.system('grep 700.00 {}.candidates > {}_cuts.candidates'.format(filename,filename))
         
