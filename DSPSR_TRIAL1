@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Dec  7 14:29:07 2022
+
+@author: deo010
+"""
+
+#%% Importing modules
+
+import os
+
+#%% Creating time files
+
+def extracttime(data,dm):
+    os.system('grep {} {}.candidates > ATEMP.candidates'.format(dm,data))
+    return "awk '{print $3}' ATEMP.candidates > ATEMPS.cands"
+
+#%% Get archive for each file
+
+def archive(time,dm,name,data):
+    # output archive files
+    return 'dspsr -S {} -T 1.5 -U 12000 -b 1500 -c 1.5 -D {} -O {}ARCH {}'.format(time,dm,name,data)
+
+#%% Archive function
+
+def DSPSR(data,name,dm):
+    
+    # get DM rows and times
+    os.system(extracttime(data,dm))
+    
+    times = open("ATEMPS.cands")
+    
+    for time in times:
+        t = float(time) - 0.5
+        os.system(archive('{}'.format(t),dm,name,data))  
+        
+    os.system('rm -f ATEMP*')
+    
+    os.system("mv *ARCH.ar ARCHIVEs/")
+    
+    # get archive
+    #os.system(archive(time,dm,name,data)) 
+
+
+#%% Looping over all candidates
+
+for filename in os.listdir():
+    if filename.endswith(".sf"):
+        print(" ")
+        print('Now working on: {}'.format(filename))
+        DSPSR(data='{}'.format(filename),name = '{}'.format(filename),dm='700.00')
+        #name = os.system('filename:0:4')
+        #print(name)
+        
+#%% Looping over all archives
+#extracttime(, '700.00','AAATEST3')
+
+for filename in os.listdir():
+    if filename.endswith(".ar"):
+        print(filename)
+        os.system('pav -d -GTp {}'.format(filename))
+
+#%% Code testing
+
+os.system('pav -d -GTp AATEST7ARCH.ar')
+
+# =============================================================================
+# f = open("TEST2.cands","r")
+# 
+# for x in f:
+#     print('{}'.format(x))
+# =============================================================================
+
+#%% Loop over all files
+
+for filename in os.listdir():
+    if filename.endswith(".sf"):
+        print(" ")
+        print('Now working on: {}'.format(filename))
+        #os.system('grep 700.00 {}.candidates > {}_cuts.candidates'.format(filename,filename))
+        
