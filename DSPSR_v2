@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Wed Dec  7 14:29:07 2022
+Created on Wed Dec 7 2022
+Updated on Fri Jan 20 2023
 
-@author: deo010
+@author: Aksita Deo
 """
 
 #%% Folder destination
@@ -19,7 +18,7 @@ print("""
 
 import os
 
-#%% Creating time files
+#%% Creating files that can extract time information
 
 def extracttime(data,dm):
     os.system('grep {} {}.candidates > ATEMP.candidates'.format(dm,data))
@@ -40,41 +39,32 @@ def DSPSR(data,name,dm):
     
     times = open("ATEMPS.cands")
     
+    # select time 0.5s before identified burst
     for time in times:
         t = float(time) - 0.5
         os.system(archive('{}'.format(t),dm,name,data))  
         
+    $ remove temporary ATEMP* files
     os.system('rm -f ATEMP*')
     
+    # make a directory to store .ar files, unless it already exists (if rerunning code)
     os.system('mkdir -pv ARCHIVEs')
     
+    # move all .ar files to the ARCHIVEs/ folder
     os.system("mv *ARCH.ar ARCHIVEs/")
-    
-    # get archive
-    #os.system(archive(time,dm,name,data)) 
 
-#%%
+#%% Example code for one source
 
 filename = 't170526_143519.sf'
 DSPSR(data='{}'.format(filename),name = '{}'.format(filename),dm='820.00')
 
-#%%
-filename = 't170526_143519.sfARCH.ar'
-os.system('pav -d -GTp {}'.format(filename))
-
-#%%
-filename = 't170526_143519.sf'
-os.system('grep 820.00 {}.candidates > {}_cuts.candidates'.format(filename,filename))
-
-#%% Looping over all candidates
+#%% Example code to loop over all candidates
 
 for filename in os.listdir():
     if filename.endswith(".sf"):
         print(" ")
         print('Now working on: {}'.format(filename))
         DSPSR(data='{}'.format(filename),name = '{}'.format(filename),dm='820.00')
-        #name = os.system('filename:0:4')
-        #print(name)
         
 #%% Folder destination
 
@@ -85,17 +75,12 @@ print("""
       """)
 
         
-#%% Looping over all archives
-#extracttime(, '700.00','AAATEST3')
+#%% Looping over all archives to view the candidates
 
 for filename in os.listdir():
     if filename.endswith(".ar"):
         print(filename)
         os.system('pav -d -GTp {}'.format(filename))
-
-#%%
-
-os.system('pav -d -GTp t171230_204749.sfARCH.ar')
 
 #%% Folder destination
 
@@ -106,7 +91,7 @@ print("""
       """)
 
 
-#%% Loop over all files to extract only your chosen value DM candidates
+#%% Loop over all files to extract only your chosen value DM candidates, in this case DM = 820.00
 
 for filename in os.listdir():
     if filename.endswith(".sf"):
@@ -114,3 +99,5 @@ for filename in os.listdir():
         print('Now working on: {}'.format(filename))
         os.system('grep 820.00 {}.candidates > {}_cuts.candidates'.format(filename,filename))
         
+  
+   
